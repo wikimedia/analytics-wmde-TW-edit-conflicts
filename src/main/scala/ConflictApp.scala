@@ -74,7 +74,7 @@ object ConflictApp {
     val conflict_details = conflicts
       .join(
         base_revs,
-        conflicts("baseRevisionId") === base_revs("revision_id")
+        conflicts("baseRevisionId") === base_revs("base_rev_id")
           and conflicts("wiki") === base_revs("wiki_db"),
         "left outer"
       )
