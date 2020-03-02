@@ -32,7 +32,7 @@ object ConflictApp {
         |  page_namespace,
         |  page_title,
         |  revision_id as base_rev_id,
-        |  wiki_db
+        |  wiki_db as base_wiki
         |from wmf.mediawiki_history
         |where
         |  event_entity = 'revision'
@@ -47,7 +47,7 @@ object ConflictApp {
         |  event_comment as other_comment,
         |  event_user_text as other_user,
         |  revision_id as other_rev_id,
-        |  wiki_db
+        |  wiki_db as other_wiki
         |from wmf.mediawiki_history
         |where
         |  event_entity = 'revision'
@@ -63,7 +63,7 @@ object ConflictApp {
         |  event_user_text as next_user,
         |  revision_id as next_rev_id,
         |  revision_parent_id as next_parent_id,
-        |  wiki_db
+        |  wiki_db as next_wiki
         |from wmf.mediawiki_history
         |where
         |  event_entity = 'revision'
@@ -75,19 +75,19 @@ object ConflictApp {
       .join(
         base_revs,
         conflicts("baseRevisionId") === base_revs("base_rev_id")
-          and conflicts("wiki") === base_revs("wiki_db"),
+          and conflicts("wiki") === base_revs("base_wiki"),
         "left"
       )
       .join(
         other_revs,
         conflicts("latestRevisionId") === other_revs("other_rev_id")
-          and conflicts("wiki") === other_revs("wiki_db"),
+          and conflicts("wiki") === other_revs("other_wiki"),
         "left"
       )
       .join(
         next_revs,
         conflicts("latestRevisionId") === next_revs("next_parent_id")
-          and conflicts("wiki") === next_revs("wiki_db"),
+          and conflicts("wiki") === next_revs("next_wiki"),
         "left"
       )
 
