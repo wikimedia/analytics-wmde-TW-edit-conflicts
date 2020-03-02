@@ -85,7 +85,7 @@ object ConflictApp {
         "left"
       )
       .join(
-        other_revs,
+        next_revs,
         conflicts("latestRevisionId") === next_revs("next_parent_id")
           and conflicts("wiki") === next_revs("wiki_db"),
         "left"
