@@ -49,12 +49,12 @@ object ConflictApp {
           |  event_entity = 'revision'
           |  and event_type = 'create'
           |""".stripMargin
-      )
+      ).as("rev_create")
       .join(
         conflicts,
         $"baseRevisionId" === $"base_rev_id"
           && $"wiki" === $"base_wiki"
-      )
+      ).select($"rev_create.*")
 
     val other_revs = spark
       .sql(
@@ -70,11 +70,12 @@ object ConflictApp {
           |  event_entity = 'revision'
           |  and event_type = 'create'
           |""".stripMargin
-      ).join(
+      ).as("rev_create")
+      .join(
         conflicts,
         $"latestRevisionId" === $"other_rev_id"
           && $"wiki" === $"other_wiki"
-    )
+      ).select($"rev_create.*")
 
     val next_revs = spark
       .sql(
@@ -91,11 +92,12 @@ object ConflictApp {
           |  event_entity = 'revision'
           |  and event_type = 'create'
           |""".stripMargin
-      ).join(
+      ).as("rev_create")
+      .join(
         conflicts,
         $"latestRevisionId" === $"next_parent_id"
           && $"wiki" === $"next_wiki"
-      )
+      ).select($"rev_create.*")
 
     // Recombine datasets into flat output rows.
     val conflict_details = conflicts
