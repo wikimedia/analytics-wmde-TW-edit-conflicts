@@ -76,19 +76,19 @@ object ConflictApp {
         base_revs,
         conflicts("baseRevisionId") === base_revs("base_rev_id")
           and conflicts("wiki") === base_revs("wiki_db"),
-        "left outer"
+        "left"
       )
       .join(
         other_revs,
         conflicts("latestRevisionId") === other_revs("other_rev_id")
           and conflicts("wiki") === other_revs("wiki_db"),
-        "left outer"
+        "left"
       )
       .join(
         other_revs,
         conflicts("latestRevisionId") === next_revs("next_parent_id")
           and conflicts("wiki") === next_revs("wiki_db"),
-        "left outer"
+        "left"
       )
 
     conflict_details
