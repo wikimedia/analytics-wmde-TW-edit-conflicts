@@ -27,8 +27,6 @@ object ConflictApp {
         |  useragent.os_family
         |from event.twocolconflictconflict
         |where year = 2020 and month = 2
-        |-- FIXME: pilot run
-        |limit 2
         |""".stripMargin
       )
 
