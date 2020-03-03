@@ -119,11 +119,9 @@ object ConflictApp {
       )
 
     conflict_details
-      .coalesce(1)
       .write
-      .option("header", "true")
       .mode(SaveMode.Overwrite)
-      .csv("/tmp/awight/conflicts")
+      .saveAsTable("awight.conflict_details")
 
     spark.stop()
   }
