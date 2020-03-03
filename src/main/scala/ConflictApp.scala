@@ -58,7 +58,7 @@ object ConflictApp {
               or $"latestRevisionId" === $"rev_parent_id"
           )
       ).select($"revision_create.*")
-      .dropDuplicates()
+      .dropDuplicates
 
     related_revisions
       .write
@@ -81,6 +81,7 @@ object ConflictApp {
         $"baseRevisionId" === $"base_rev_id"
           && $"wiki" === $"base_wiki"
       ).select($"base_revs.*")
+      .dropDuplicates
 
     base_revs
       .write
@@ -100,6 +101,7 @@ object ConflictApp {
         $"latestRevisionId" === $"other_rev_id"
           && $"wiki" === $"other_wiki"
       ).select($"other_revs.*")
+      .dropDuplicates
 
     other_revs
       .write
@@ -120,6 +122,7 @@ object ConflictApp {
         $"latestRevisionId" === $"next_parent_id"
           && $"wiki" === $"next_wiki"
       ).select($"next_revs.*")
+      .dropDuplicates
 
     next_revs
       .write
