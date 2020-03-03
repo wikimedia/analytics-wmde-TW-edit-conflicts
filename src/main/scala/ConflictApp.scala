@@ -26,6 +26,11 @@ object ConflictApp {
         |""".stripMargin
       )
 
+    conflicts
+      .write
+      .mode(SaveMode.Overwrite)
+      .parquet("/tmp/awight/conflicts")
+
     val related_revisions = spark
       .sql(
         """
@@ -55,6 +60,11 @@ object ConflictApp {
       ).select($"revision_create.*")
       .dropDuplicates()
 
+    related_revisions
+      .write
+      .mode(SaveMode.Overwrite)
+      .parquet("/tmp/awight/related_revisions")
+
     val base_revs = related_revisions
       .select(
         $"rev_timestamp".as("base_timestamp"),
@@ -72,6 +82,11 @@ object ConflictApp {
           && $"wiki" === $"base_wiki"
       ).select($"base_revs.*")
 
+    base_revs
+      .write
+      .mode(SaveMode.Overwrite)
+      .parquet("/tmp/awight/base_revs")
+
     val other_revs = related_revisions
       .select(
         $"rev_timestamp".as("other_timestamp"),
@@ -85,6 +100,11 @@ object ConflictApp {
         $"latestRevisionId" === $"other_rev_id"
           && $"wiki" === $"other_wiki"
       ).select($"other_revs.*")
+
+    other_revs
+      .write
+      .mode(SaveMode.Overwrite)
+      .parquet("/tmp/awight/other_revs")
 
     val next_revs = related_revisions
       .select(
@@ -100,6 +120,11 @@ object ConflictApp {
         $"latestRevisionId" === $"next_parent_id"
           && $"wiki" === $"next_wiki"
       ).select($"next_revs.*")
+
+    next_revs
+      .write
+      .mode(SaveMode.Overwrite)
+      .parquet("/tmp/awight/next_revs")
 
     // Recombine datasets into flat output rows.
     val conflict_details = conflicts
@@ -125,7 +150,7 @@ object ConflictApp {
     conflict_details
       .write
       .mode(SaveMode.Overwrite)
-      .parquet("/tmp/awight/conflicts")
+      .parquet("/tmp/awight/conflict_details")
 
     spark.stop()
   }
