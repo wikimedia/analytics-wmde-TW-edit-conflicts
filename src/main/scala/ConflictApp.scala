@@ -22,7 +22,7 @@ object ConflictApp {
         |  event.baseRevisionId,
         |  event.latestRevisionId,
         |  event.editCount,
-        |  replace(event.textUser, '\n', '\\n'),
+        |  replace(event.textUser, '\n', '\\n') as textbox,
         |  useragent.browser_family,
         |  useragent.os_family
         |from event.twocolconflictconflict
