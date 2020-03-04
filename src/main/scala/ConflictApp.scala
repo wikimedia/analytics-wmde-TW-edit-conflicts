@@ -23,9 +23,9 @@ object ConflictApp {
         |  useragent.browser_family,
         |  useragent.os_family
         |from event.twocolconflictconflict
-        |where year = 2020 and month = 2
+        |where year = 2020
         |""".stripMargin
-      )
+      ).cache
 
     conflicts
       .write
@@ -46,8 +46,6 @@ object ConflictApp {
           |  rev_parent_id,
           |  database
           |from event.mediawiki_revision_create
-          |where
-          |  year = 2020 and month = 2
           |""".stripMargin
       ).as("revision_create")
       .join(
