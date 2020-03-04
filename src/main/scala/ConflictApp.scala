@@ -136,14 +136,12 @@ object ConflictApp {
         conflicts("baseRevisionId") === $"base_rev_id"
           && conflicts("wiki") === $"base_wiki",
         "left"
-      )
-      .join(
+      ).join(
         other_revs,
         conflicts("latestRevisionId") === $"other_rev_id"
           && conflicts("wiki") === $"other_wiki",
         "left"
-      )
-      .join(
+      ).join(
         next_revs,
         conflicts("latestRevisionId") === $"next_parent_id"
           && conflicts("wiki") === $"next_wiki",
