@@ -13,6 +13,7 @@ object ConflictApp {
     val conflicts = spark.sql(
       """
         |select
+        |  to_timestamp(dt) as conflict_timestamp,
         |  webhost,
         |  wiki,
         |  event.baseRevisionId,
@@ -35,7 +36,7 @@ object ConflictApp {
       .sql(
         """
           |select
-          |  rev_timestamp,
+          |  to_timestamp(rev_timestamp) as rev_timestamp,
           |  comment,
           |  performer.user_text,
           |  page_id,
