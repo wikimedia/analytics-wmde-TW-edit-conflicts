@@ -9,6 +9,7 @@ object BuildConflictMetadataApp extends SparkSessionWrapper {
     val conflicts = DebugTable("conflicts", QueryConflictPeriod(2020, 2))
     DebugTable("conflict_details", QueryConflictMetadata(conflicts, 2020))
 
+    // FIXME: Is this necessary?
     spark.stop()
   }
 }
