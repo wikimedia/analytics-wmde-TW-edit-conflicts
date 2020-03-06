@@ -5,7 +5,6 @@ import org.apache.spark.sql.SaveMode;
  */
 object BuildConflictMetadataApp extends SparkSessionWrapper {
   def main(args: Array[String]): Unit = {
-
     val conflicts = DebugTable("conflicts", QueryConflictPeriod(2020, 2))
     DebugTable("conflict_details", QueryConflictMetadata(conflicts, 2020))
 

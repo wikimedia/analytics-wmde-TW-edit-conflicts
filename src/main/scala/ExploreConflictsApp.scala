@@ -1,13 +1,13 @@
 import org.apache.spark.sql.functions.count
 
-object ExploreConflictsApp extends SparkSessionWrapper {
+object ExploreConflictsApp extends SparkSessionWrapper with Defines {
   def main(args: Array[String]): Unit = {
     import spark.implicits._
 
     val reader = spark.read
     val conflict_details = reader
       .format("parquet")
-      .load("/tmp/awight/conflict_details")
+      .load(s"${DATA_DIR}/conflict_details")
       .cache
 
     println("Conflict details schema:")
