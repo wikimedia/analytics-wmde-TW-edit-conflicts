@@ -1,7 +1,9 @@
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.SaveMode
 
-object DebugTable extends Defines {
+// TODO: Suite of composable enhancements: LazyTable, ...
+object DebugTable extends Defines with SparkSessionWrapper {
+
   def apply(name: String, table: DataFrame): DataFrame = {
     saveIntermediateTable(table, name)
     table
@@ -11,6 +13,13 @@ object DebugTable extends Defines {
     table
       .write
       .mode(SaveMode.Overwrite)
-      .parquet(s"${DATA_DIR}/${name}")
+      .parquet(dataPathFromName(name))
+  }
+
+  def loadIntermediateTable(name: String): DataFrame = {
+    spark
+      .read
+      .parquet(dataPathFromName(name))
+      .as(name)
   }
 }
