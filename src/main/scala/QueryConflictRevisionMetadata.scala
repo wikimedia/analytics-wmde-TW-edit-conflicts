@@ -1,6 +1,6 @@
 import org.apache.spark.sql.DataFrame
 
-object QueryConflictMetadata extends SparkSessionWrapper {
+object QueryConflictRevisionMetadata extends SparkSessionWrapper {
   def apply(conflicts: DataFrame, year: Int): DataFrame = {
     import spark.implicits._
 
@@ -10,8 +10,9 @@ object QueryConflictMetadata extends SparkSessionWrapper {
         s"""
           |select
           |  to_timestamp(rev_timestamp) as rev_timestamp,
-          |  comment,
+          |  performer.user_id,
           |  performer.user_text,
+          |  performer.user_edit_count,
           |  page_id,
           |  page_namespace,
           |  page_title,
