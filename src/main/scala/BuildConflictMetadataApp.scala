@@ -6,5 +6,7 @@ object BuildConflictMetadataApp extends SparkSessionWrapper {
     val conflicts = DebugTable("conflicts", QueryConflictPeriod(2020, 3))
     val conflict_rev_details = DebugTable("conflict_rev_details", QueryConflictRevisionMetadata(conflicts, 2020))
     val edit_attempt_steps = DebugTable("conflict_edit_steps", QueryConflictEditAttemptSteps(conflicts, 2020))
+
+    QueryConflictExit(conflicts, 2020)
   }
 }
