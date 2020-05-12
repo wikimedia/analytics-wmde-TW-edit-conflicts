@@ -1,5 +1,5 @@
 import org.apache.spark.sql.DataFrame
-import org.apache.spark.sql.functions.unix_timestamp
+import org.apache.spark.sql.functions._
 
 object QueryConflictExit extends SparkSessionWrapper {
   def apply(conflicts: DataFrame, year: Int): Unit = {
@@ -16,17 +16,18 @@ object QueryConflictExit extends SparkSessionWrapper {
            |  event.latest_rev_id,
            |  event.page_namespace,
            |  event.page_title,
-           |  case when
-           |    left(event.selections, 3) == 'v1:' then event.selections
-           |    else null
-           |  end as v1_selections,
-           |  size(split(v1_selections, '\|' )) as row_count,
+           |  event.selections,
            |  event.session_token,
            |  wiki
            |from event.twocolconflictexit
            |where year = ${year}
            |""".stripMargin
       )
+        .withColumn("v1_selections",
+          when(substring($"selections", 1, 3) === lit("v1:"), $"selections")
+            .otherwise(lit(null)))
+        .withColumn("row_count",
+          size(split($"v1_selections", "\\|")))
     )
 
     val linked_exits = DebugTable("linked_exits",
