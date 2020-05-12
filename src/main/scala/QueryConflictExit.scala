@@ -16,6 +16,12 @@ object QueryConflictExit extends SparkSessionWrapper {
            |  event.latest_rev_id,
            |  event.page_namespace,
            |  event.page_title,
+           |  case when
+           |    left(event.selections, 3) == 'v1:' then event.selections
+           |    else null
+           |  end as v1_selections,
+           |  size(split(v1_selections, '\|' )) as row_count,
+           |  event.session_token,
            |  wiki
            |from event.twocolconflictexit
            |where year = ${year}
