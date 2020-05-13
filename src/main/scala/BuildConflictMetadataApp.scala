@@ -1,11 +1,29 @@
 /**
  * Take a sample of edit conflict logs, and gather metadata about the conflicting revisions.
  */
-object BuildConflictMetadataApp extends SparkSessionWrapper {
+object BuildConflictMetadataApp {
   def main(args: Array[String]): Unit = {
-    val conflicts = DebugTable("conflicts", QueryConflictPeriod(year = 2020, month = 4))
-    val conflict_rev_details = DebugTable("conflict_rev_details", QueryConflictRevisionMetadata(conflicts, 2020))
+    val year = 2020
+    val month = 4
 
-    QueryConflictExit(conflicts, 2020)
+    val conflicts = PersistentTable.refresh(
+        name = "conflicts",
+        calculate = () => QueryConflictPeriod(year, month)
+    ).cache()
+
+    val _conflict_rev_details = PersistentTable.refresh(
+        name = "conflict_rev_details",
+        calculate = () => QueryConflictRevisionMetadata(conflicts, year)
+    )
+
+    val exits = PersistentTable.refresh(
+        name = "exits",
+        calculate = () => QueryConflictExit(conflicts, year)
+    )
+
+    val _linked_exits = PersistentTable.refresh(
+        name = "linked_exits",
+        calculate = () => QueryLinkConflictExit(conflicts, exits)
+    )
   }
 }

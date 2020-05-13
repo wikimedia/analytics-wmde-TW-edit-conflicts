@@ -22,7 +22,5 @@ object QueryConflictPeriod extends SparkSessionWrapper {
         |where year = ${year} and month = ${month}
         |""".stripMargin
     )
-      .as("conflicts")
-      .cache
   }
 }

@@ -4,8 +4,7 @@ object QueryConflictRevisionMetadata extends SparkSessionWrapper {
   def apply(conflicts: DataFrame, year: Int): DataFrame = {
     import spark.implicits._
 
-    val related_revisions = DebugTable(
-      "related_revisions",
+    val related_revisions =
       spark.sql(
         s"""
           |select
@@ -33,10 +32,8 @@ object QueryConflictRevisionMetadata extends SparkSessionWrapper {
           )
       ).select($"revision_create.*")
       .dropDuplicates
-    )
 
-    val base_revs = DebugTable(
-      "base_revs",
+    val base_revs =
       related_revisions.select(
         $"rev_timestamp".as("base_timestamp"),
         $"user_text".as("base_user"),
@@ -54,10 +51,8 @@ object QueryConflictRevisionMetadata extends SparkSessionWrapper {
           && $"conflicts.wiki" === $"base_wiki"
       ).select($"base_revs.*")
       .dropDuplicates
-    )
 
-    val other_revs = DebugTable(
-      "other_revs",
+    val other_revs =
       related_revisions.select(
         $"rev_timestamp".as("other_timestamp"),
         $"user_text".as("other_user"),
@@ -72,10 +67,8 @@ object QueryConflictRevisionMetadata extends SparkSessionWrapper {
           && $"conflicts.wiki" === $"other_wiki"
       ).select($"other_revs.*")
       .dropDuplicates
-    )
 
-    val next_revs = DebugTable(
-      "next_revs",
+    val next_revs =
       related_revisions.select(
         $"rev_timestamp".as("next_timestamp"),
         $"user_text".as("next_user"),
@@ -91,7 +84,6 @@ object QueryConflictRevisionMetadata extends SparkSessionWrapper {
           && $"conflicts.wiki" === $"next_wiki"
       ).select($"next_revs.*")
       .dropDuplicates
-    )
 
     // Recombine datasets into flat output rows.
     conflicts.join(
