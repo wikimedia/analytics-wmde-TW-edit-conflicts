@@ -7,7 +7,7 @@ object Defines {
    */
   val DEBUG = false
 
-  val DATA_DIR = "/tmp/awight"
+  val DATA_DIR = "/user/awight/edit-conflicts"
 
   def dataPathFromName(name: String): String = {
     s"${DATA_DIR}/${name}"
