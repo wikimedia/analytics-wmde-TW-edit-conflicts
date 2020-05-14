@@ -101,6 +101,6 @@ object QueryConflictRevisionMetadata extends SparkSessionWrapper {
       conflicts("latest_rev_id") === $"next_parent_id"
         && conflicts("wiki") === $"next_wiki",
       "left"
-    )
+    ).dropDuplicates()
   }
 }
