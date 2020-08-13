@@ -19,4 +19,4 @@ Process data:
         --master yarn \
         --executor-memory 8G --executor-cores 4 --driver-memory 16G \
         --conf spark.dynamicAllocation.maxExecutors=64 \
-        ./target/scala-2.11/conflict-spark-2_2.11-0.1.jar
+        ./target/scala-2.11/edit-conflict-analytics_2.11-0.2.jar

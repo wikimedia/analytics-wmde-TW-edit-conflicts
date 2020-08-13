@@ -1,7 +1,7 @@
 import org.apache.spark.sql.DataFrame
 
 object QueryConflictPeriod extends SparkSessionWrapper {
-  def apply(year: Int, month: Int): DataFrame = {
+  def apply(year: Int): DataFrame = {
     spark.sql(
       s"""
         |select
@@ -19,7 +19,7 @@ object QueryConflictPeriod extends SparkSessionWrapper {
         |  event.conflictChunks as conflict_chunks,
         |  event.conflictChars as conflict_chars
         |from event.twocolconflictconflict
-        |where year = ${year} and month = ${month}
+        |where year = ${year}
         |""".stripMargin
     )
   }

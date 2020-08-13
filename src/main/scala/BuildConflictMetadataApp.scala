@@ -4,16 +4,14 @@
 object BuildConflictMetadataApp {
   def main(args: Array[String]): Unit = {
     val year = 2020
-    val month = 4
 
     val raw_conflicts = PersistentTable.refresh(
-      name = "conflicts",
-      calculate = () => QueryConflictPeriod(year, month)
+      name = "raw_conflicts",
+      calculate = () => QueryConflictPeriod(year)
     ).cache()
-    val conflicts = PersistentTable.refresh(
-      name = "clean_conflicts",
-      calculate = () => FilterCleanConflicts(raw_conflicts)
-    ).as("conflicts")
+
+    val (conflicts, _, _) =
+      SplitCleanConflicts(raw_conflicts)
 
     val _conflict_rev_details = PersistentTable.refresh(
         name = "conflict_rev_details",
